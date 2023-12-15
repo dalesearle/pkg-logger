@@ -1,4 +1,4 @@
-module github.con/dalesearle/pkglogger
+module github.com/dalesearle/pkglogger
 
 go 1.21.0
 
