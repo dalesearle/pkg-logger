@@ -13,6 +13,7 @@ const (
 )
 
 type PkgLogger struct {
+	details      map[string]string
 	err          error
 	logger       zerolog.Logger
 	loggingEvent *zerolog.Event
@@ -30,14 +31,19 @@ func NewPkgLogger(pkg, method string) *PkgLogger {
 		p = p + "." + method
 	}
 	return &PkgLogger{
-		logger: log.With().Str("pkg", p).Logger(),
-		result: Success,
+		details: make(map[string]string),
+		logger:  log.With().Str("pkg", p).Logger(),
+		result:  Success,
 	}
 }
 
 func (l *PkgLogger) Debug() *PkgLogger {
-
 	l.loggingEvent = l.logger.Debug()
+	return l
+}
+
+func (l *PkgLogger) Detail(key, value string) *PkgLogger {
+	l.details[key] = value
 	return l
 }
 
@@ -136,6 +142,13 @@ func (l *PkgLogger) marshallOutcome() *zerolog.Event {
 	}
 	if l.taxYear > 0 {
 		outcome = outcome.Int32("tax_year", l.taxYear)
+	}
+	if len(l.details) > 0 {
+		details := zerolog.Dict()
+		for key, value := range l.details {
+			details.Str(key, value)
+		}
+		l.loggingEvent.Dict("Details", details)
 	}
 	return l.loggingEvent.Dict("outcome", outcome)
 }
