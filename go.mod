@@ -1,4 +1,4 @@
-module github.com/dsearle/pkg_logger
+module github.com/dsearle/pkg-logger
 
 go 1.21
 
