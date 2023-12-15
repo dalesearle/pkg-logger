@@ -1,4 +1,4 @@
-module taxhawk.com/pkg_logger
+module github.com/dsearle/pkg_logger
 
 go 1.21
 
